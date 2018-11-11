@@ -571,6 +571,7 @@ data GeneralFlag
    | Opt_DiagnosticsShowCaret -- Show snippets of offending code
    | Opt_PprCaseAsLet
    | Opt_PprShowTicks
+   | Opt_CompactHoles
    | Opt_ShowHoleConstraints
     -- Options relating to the display of valid hole fits
     -- when generating an error message for a typed hole
@@ -4021,6 +4022,7 @@ fFlagsDeps = [
 -- @-fno-\<blah\>@
 fHoleFlags :: [(Deprecation, FlagSpec GeneralFlag)]
 fHoleFlags = [
+  flagSpec "compact-holes"                    Opt_CompactHoles,
   flagSpec "show-hole-constraints"            Opt_ShowHoleConstraints,
   depFlagSpec' "show-valid-substitutions"     Opt_ShowValidHoleFits
    (useInstead "-f" "show-valid-hole-fits"),
@@ -4339,6 +4341,9 @@ impliedGFlags :: [(GeneralFlag, TurnOnFlag, GeneralFlag)]
 impliedGFlags = [(Opt_DeferTypeErrors, turnOn, Opt_DeferTypedHoles)
                 ,(Opt_DeferTypeErrors, turnOn, Opt_DeferOutOfScopeVariables)
                 ,(Opt_Strictness, turnOn, Opt_WorkerWrapper)
+                ,(Opt_CompactHoles, turnOn, Opt_ShowHoleConstraints)
+                ,(Opt_CompactHoles, turnOff, Opt_ShowValidHoleFits)
+                ,(Opt_CompactHoles, turnOn, Opt_UnclutterValidHoleFits)
                 ] ++ validHoleFitsImpliedGFlags
 
 -- General flags that are switched on/off when other general flags are switched
