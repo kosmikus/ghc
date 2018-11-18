@@ -1,0 +1,44 @@
+
+compact_holes_hole_fits.hs:4:5: warning: [-Wtyped-holes (in -Wdefault)]
+    • Hole:
+        _ :: t
+    • Context:
+        f :: t
+      Valid hole fits include f :: forall t. t
+
+compact_holes_hole_fits.hs:7:7: warning: [-Wtyped-holes (in -Wdefault)]
+    • Hole:
+        _ :: Char
+    • Context:
+        x :: Int
+        g :: Int -> Char
+      Valid hole fits include
+        f :: forall t. t
+        maxBound :: forall a. Bounded a => a
+        minBound :: forall a. Bounded a => a
+
+compact_holes_hole_fits.hs:9:5: warning: [-Wtyped-holes (in -Wdefault)]
+    • Hole:
+        _ :: [Char]
+    • Context:
+        h :: [Char]
+      Valid hole fits include
+        h :: [Char]
+        f :: forall t. t
+        [] :: forall a. [a]
+        mempty :: forall a. Monoid a => a
+
+compact_holes_hole_fits.hs:12:15: warning: [-Wtyped-holes (in -Wdefault)]
+    • Hole:
+        _ :: b0
+    • Context:
+        y :: [a]
+        z :: [a] -> [a]
+      Valid hole fits include
+        y :: [a]
+        z :: [a] -> [a]
+        g :: Int -> Char
+        h :: [Char]
+        f :: forall t. t
+        otherwise :: Bool
+        (Some hole fits suppressed; use -fmax-valid-hole-fits=N or -fno-max-valid-hole-fits)
