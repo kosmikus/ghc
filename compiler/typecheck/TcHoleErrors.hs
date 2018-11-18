@@ -590,7 +590,6 @@ findValidHoleFits tidy_env implics simples ct | isExprHoleCt ct =
      ; maxVSubs <- maxValidHoleFits <$> getDynFlags
      ; hfdc <- getHoleFitDispConfig
      ; sortingAlg <- getSortingAlg
-     ; compactHoles <- goptM Opt_CompactHoles
      ; let findVLimit = if sortingAlg > NoSorting then Nothing else maxVSubs
      ; refLevel <- refLevelHoleFits <$> getDynFlags
      ; traceTc "findingValidHoleFitsFor { " $ ppr ct
@@ -615,17 +614,10 @@ findValidHoleFits tidy_env implics simples ct | isExprHoleCt ct =
      ; let (pVDisc, limited_subs) = possiblyDiscard maxVSubs tidy_sorted_subs
            vDiscards = pVDisc || searchDiscards
      ; subs_with_docs <- addDocs limited_subs
-     ; let vMsg
-             | compactHoles = ppUnless (null subs_with_docs) $
-                                vcat
-                                  [ text "Valid hole fits:"
-                                  , nest 2 (vcat (map (pprHoleFit hfdc) subs_with_docs))
-                                  , ppWhen vDiscards subsDiscardMsg
-                                  ]
-             | otherwise    = ppUnless (null subs_with_docs) $
-                                hang (text "Valid hole fits include") 2 $
-                                  vcat (map (pprHoleFit hfdc) subs_with_docs)
-                                    $$ ppWhen vDiscards subsDiscardMsg
+     ; let vMsg = ppUnless (null subs_with_docs) $
+                    hang (text "Valid hole fits include") 2 $
+                      vcat (map (pprHoleFit hfdc) subs_with_docs)
+                        $$ ppWhen vDiscards subsDiscardMsg
      -- Refinement hole fits. See Note [Valid refinement hole fits include ...]
      ; (tidy_env, refMsg) <- if refLevel >= Just 0 then
          do { maxRSubs <- maxRefHoleFits <$> getDynFlags
